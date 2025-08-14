@@ -7,7 +7,7 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register_acre', async (req, res) => {
   const { identifiant, password, prenom, nom, age, division } = req.body;
 
   // Vérification des champs requis
@@ -38,8 +38,8 @@ router.post('/register', async (req, res) => {
       ) VALUES (
         $1, $2, $3, $3,
         $4, $5, $6,
-        NULL, 'v', 'aspirant',
-        TRUE, 0,
+        NULL, 'en attente', '3e classe',
+        TRUE, 1,
         FALSE, 'vivant'
       ) RETURNING id_user
     `;

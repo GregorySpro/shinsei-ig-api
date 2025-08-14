@@ -26,7 +26,7 @@ app.get('/users', async (req, res) => {
 });
 
 const registerRoute = require('./routes/register');
-app.use('/api', registerRoute); // la route sera dispo à /api/register
+app.use('/api', registerRoute); // la route sera dispo à /api/register_acre
 
 
 app.listen(port, () => {
