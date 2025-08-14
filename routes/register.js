@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');
+const bcrypt = require('bcrypt');
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -27,6 +28,9 @@ router.post('/register_acre', async (req, res) => {
       return res.status(409).json({ message: 'Identifiant déjà utilisé.' });
     }
 
+    // Hash du mot de passe avec bcrypt
+    const hashedPassword = await bcrypt.hash(password, 10); // 10 = salt rounds
+
     // Insertion avec les valeurs par défaut pour les champs non envoyés
     const insertQuery = `
       INSERT INTO users (
@@ -50,7 +54,7 @@ router.post('/register_acre', async (req, res) => {
       age,
       division,
       identifiant,
-      password
+      hashedPassword
     ]);
 
     client.release();
