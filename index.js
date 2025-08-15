@@ -33,6 +33,10 @@ app.use('/api', registerRoute); // la route sera dispo à /api/register_acre
 const loginRoute = require('./routes/login');
 app.use('/api', loginRoute); // la route sera dispo à /api/login
 
+const divisionRoute = require('./routes/division');
+app.use('/api', divisionRoute);
+
+
 
 
 app.listen(port, () => {
