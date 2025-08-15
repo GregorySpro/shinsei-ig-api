@@ -30,6 +30,10 @@ app.get('/users', async (req, res) => {
 const registerRoute = require('./routes/register');
 app.use('/api', registerRoute); // la route sera dispo à /api/register_acre
 
+const loginRoute = require('./routes/login');
+app.use('/api', loginRoute); // la route sera dispo à /api/login
+
+
 
 app.listen(port, () => {
   console.log(`API en écoute sur le port ${port}`);
