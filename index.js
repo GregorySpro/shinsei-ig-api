@@ -28,17 +28,17 @@ app.get('/users', async (req, res) => {
 });
 
 const registerRoute = require('./routes/register');
-app.use('/api', registerRoute); // la route sera dispo à /api/register_acre
+app.use('/api', registerRoute);
 
 const loginRoute = require('./routes/login');
-app.use('/api', loginRoute); // la route sera dispo à /api/login
+app.use('/api', loginRoute);
 
 const profileRoute = require('./routes/profile');
 app.use('/api', profileRoute);
 
-
-
-
+// Ajout de la nouvelle route pour l'enregistrement d'un Aspirant
+const registerAspirantRoute = require('./routes/register_aspirant');
+app.use('/api', registerAspirantRoute); // La route sera disponible à /api/register_aspirant
 
 app.listen(port, () => {
   console.log(`API en écoute sur le port ${port}`);
