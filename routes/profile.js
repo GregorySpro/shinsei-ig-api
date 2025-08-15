@@ -8,13 +8,12 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-// Route protégée qui renvoie la division choisie
-router.get('/division', authMiddleware, async (req, res) => {
+router.get('/profile', authMiddleware, async (req, res) => {
   const identifiant = req.user.identifiant;
 
   try {
     const result = await pool.query(
-      'SELECT choix_div FROM users WHERE identifiant = $1',
+      'SELECT nom, prenom, choix_div, status_choix, rang FROM users WHERE identifiant = $1',
       [identifiant]
     );
 
@@ -22,9 +21,7 @@ router.get('/division', authMiddleware, async (req, res) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
 
-    const division = result.rows[0].choix_div;
-
-    res.json({ division });
+    res.json(result.rows[0]);
   } catch (error) {
     console.error('Erreur DB:', error);
     res.status(500).json({ message: 'Erreur serveur' });
