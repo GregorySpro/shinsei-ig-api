@@ -30,8 +30,8 @@ app.get('/users', async (req, res) => {
 const registerRoute = require('./routes/register');
 app.use('/api', registerRoute); // la route sera dispo à /api/register_acre
 
-const profileRoute = require('./routes/register_aspirant');
-app.use('/api', profileRoute);
+const register_aspirantRoute = require('./routes/register_aspirant');
+app.use('/api', register_aspirantRoute);
 
 const loginRoute = require('./routes/login');
 app.use('/api', loginRoute); // la route sera dispo à /api/login
