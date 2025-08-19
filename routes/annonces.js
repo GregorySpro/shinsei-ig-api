@@ -27,9 +27,10 @@ router.get('/simple', authMiddleware, async (req, res) => {
 
     res.status(200).json(result.rows);
   } catch (error) {
-    console.error('Erreur DB:', error);
+    console.error('Erreur DB complète:', error); // <== ici
     res.status(500).json({ message: 'Erreur serveur' });
   }
 });
+
 
 module.exports = router;
