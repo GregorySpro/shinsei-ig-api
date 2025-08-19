@@ -1,11 +1,15 @@
-// 📁 routes/annonces.js
 const express = require('express');
 const router = express.Router();
-const pool = require('../db'); // ton fichier de connexion PG
-const auth = require('../middleware/auth'); // ton middleware de sécurité
+const authMiddleware = require('../middlewares/authMiddleware');
+const { Pool } = require('pg');
 
-// GET /annonces/simple - récupérer les annonces de type "simple"
-router.get('/simple', auth, async (req, res) => {
+// Connexion à la base via Pool (comme ta route /profile)
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+});
+
+router.get('/simple', authMiddleware, async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
@@ -22,9 +26,9 @@ router.get('/simple', auth, async (req, res) => {
     `);
 
     res.status(200).json(result.rows);
-  } catch (err) {
-    console.error('Erreur lors de la récupération des annonces simples :', err);
-    res.status(500).json({ error: 'Erreur serveur' });
+  } catch (error) {
+    console.error('Erreur DB:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 });
 
