@@ -20,7 +20,7 @@ router.get('/simple', authMiddleware, async (req, res) => {
         u.prenom,
         u.nom
       FROM annonces a
-      JOIN users u ON a.userid = u.id
+      JOIN users u ON a.userid = u.id_user
       WHERE a.type_annonce = 'simple'
       ORDER BY a.date DESC, a.heure DESC
     `);
