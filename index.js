@@ -40,6 +40,9 @@ app.use('/api', profileRoute);
 const registerAspirantRoute = require('./routes/register_aspirant');
 app.use('/api', registerAspirantRoute); // La route sera disponible à /api/register_aspirant
 
+const annoncesRoutes = require('./routes/annonces');
+app.use('/annonces', annoncesRoutes); //récupère les annonces simples
+
 app.listen(port, () => {
   console.log(`API en écoute sur le port ${port}`);
 });
