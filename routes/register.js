@@ -9,9 +9,6 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-// Clé secrète pour JWT (idéalement à stocker en variable d'environnement)
-const JWT_SECRET = process.env.JWT_SECRET || 'ta_clef_secrete';
-
 router.post('/register_acre', async (req, res) => {
   const { identifiant, password, prenom, nom, age, division } = req.body;
 
@@ -45,7 +42,7 @@ router.post('/register_acre', async (req, res) => {
         NULL, 'en attente', '3e classe',
         TRUE, 1,
         FALSE, 'vivant'
-      ) RETURNING id_user
+      ) RETURNING id_user, identifiant
     `;
 
     const result = await client.query(insertQuery, [
@@ -57,21 +54,24 @@ router.post('/register_acre', async (req, res) => {
       hashedPassword
     ]);
 
-    const userId = result.rows[0].id_user;
-
     client.release();
 
-    // Génération du token JWT (payload avec identifiant + id_user par ex)
-    res.status(200).json({
-      message: 'Inscription réussie.',
-      token,
-      user: { id: user.id, identifiant: user.identifiant }, // infos utiles côté client
+    const newUser = result.rows[0];
+
+    // Création du token JWT
+    const payload = {
+      userId: newUser.id_user,
+      identifiant: identifiant,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: '2h',
     });
 
     return res.status(201).json({
       message: 'Utilisateur créé avec succès.',
-      id_user: userId,
-      token // on renvoie le token ici
+      id_user: newUser.id_user,
+      token,  // <-- ici on envoie le token
     });
   } catch (err) {
     console.error('Erreur serveur :', err);
