@@ -62,11 +62,11 @@ router.post('/register_acre', async (req, res) => {
     client.release();
 
     // Génération du token JWT (payload avec identifiant + id_user par ex)
-    const token = jwt.sign(
-      { identifiant, id_user: userId },
-      JWT_SECRET,
-      { expiresIn: '12h' } // token valide 12h, tu peux ajuster
-    );
+    res.status(200).json({
+      message: 'Inscription réussie.',
+      token,
+      user: { id: user.id, identifiant: user.identifiant }, // infos utiles côté client
+    });
 
     return res.status(201).json({
       message: 'Utilisateur créé avec succès.',
