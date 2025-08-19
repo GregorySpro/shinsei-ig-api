@@ -2,16 +2,19 @@ const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
+// Clé secrète pour JWT (idéalement à stocker en variable d'environnement)
+const JWT_SECRET = process.env.JWT_SECRET || 'ta_clef_secrete';
+
 router.post('/register_acre', async (req, res) => {
   const { identifiant, password, prenom, nom, age, division } = req.body;
 
-  // Vérification des champs requis
   if (!identifiant || !password || !prenom || !nom || !age || !division) {
     return res.status(400).json({ message: 'Champs requis manquants.' });
   }
@@ -19,7 +22,6 @@ router.post('/register_acre', async (req, res) => {
   try {
     const client = await pool.connect();
 
-    // Vérifie que l'identifiant est unique
     const checkQuery = 'SELECT 1 FROM users WHERE identifiant = $1';
     const checkResult = await client.query(checkQuery, [identifiant]);
 
@@ -28,10 +30,8 @@ router.post('/register_acre', async (req, res) => {
       return res.status(409).json({ message: 'Identifiant déjà utilisé.' });
     }
 
-    // Hash du mot de passe avec bcrypt
-    const hashedPassword = await bcrypt.hash(password, 10); // 10 = salt rounds
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insertion avec les valeurs par défaut pour les champs non envoyés
     const insertQuery = `
       INSERT INTO users (
         prenom, nom, age_creation, age_actuel,
@@ -57,11 +57,21 @@ router.post('/register_acre', async (req, res) => {
       hashedPassword
     ]);
 
+    const userId = result.rows[0].id_user;
+
     client.release();
+
+    // Génération du token JWT (payload avec identifiant + id_user par ex)
+    const token = jwt.sign(
+      { identifiant, id_user: userId },
+      JWT_SECRET,
+      { expiresIn: '12h' } // token valide 12h, tu peux ajuster
+    );
 
     return res.status(201).json({
       message: 'Utilisateur créé avec succès.',
-      id_user: result.rows[0].id_user
+      id_user: userId,
+      token // on renvoie le token ici
     });
   } catch (err) {
     console.error('Erreur serveur :', err);
