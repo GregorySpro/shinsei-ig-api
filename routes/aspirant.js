@@ -13,7 +13,7 @@ router.get('/aspirant/profil', authMiddleware, async (req, res) => {
 
   try {
     const result = await pool.query(
-      `SELECT nom, prenom, rang, choix_div, status_choix, motivations
+      `SELECT nom, prenom, age_actuel, rang, choix_div, status_choix, motivations
        FROM users
        WHERE identifiant = $1`,
       [identifiant]
