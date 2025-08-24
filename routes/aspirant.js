@@ -1,22 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware');
-
-// Exemple de pool, adapte en fonction de ta config
 const { Pool } = require('pg');
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
-// Handler pour récupérer les infos du profil aspirant
 router.get('/aspirant/profil', authMiddleware, async (req, res) => {
   try {
-    // On récupère l'ID de l'aspirant depuis le token si tu l'as mis dans req.user par exemple
-    // Sinon tu peux récupérer via query, params, etc.
-    const aspirantId = req.user.id; 
+    const aspirantId = req.user.identifiant; // 👈 clé à adapter selon le contenu du token
 
-    // Adaptation selon ta table et ta structure
     const query = `
       SELECT nom, prenom, rang, choix_div, status_choix, motivations
       FROM users
@@ -30,7 +25,7 @@ router.get('/aspirant/profil', authMiddleware, async (req, res) => {
 
     res.json(result.rows[0]);
   } catch (error) {
-    console.error(error);
+    console.error('Erreur lors de la récupération du profil :', error);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 });
