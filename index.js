@@ -43,6 +43,9 @@ app.use('/api', registerAspirantRoute); // La route sera disponible à /api/regi
 const annoncesRoutes = require('./routes/annonces');
 app.use('/annonces', annoncesRoutes); //récupère les annonces simples
 
+const aspirantRoutes = require('./routes/aspirant');
+app.use('/api', aspirantRoutes);  // <-- Ajout de la route aspirant
+
 app.listen(port, () => {
   console.log(`API en écoute sur le port ${port}`);
 });
