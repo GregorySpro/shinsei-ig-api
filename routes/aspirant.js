@@ -10,7 +10,7 @@ const pool = new Pool({
 
 router.get('/aspirant/profil', authMiddleware, async (req, res) => {
   try {
-    const aspirantId = req.user.identifiant; // 👈 clé à adapter selon le contenu du token
+    const aspirantId = req.user.id; // 👈 clé à adapter selon le contenu du token
 
     const query = `
       SELECT nom, prenom, rang, choix_div, status_choix, motivations
