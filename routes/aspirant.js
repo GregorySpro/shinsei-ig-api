@@ -19,7 +19,7 @@ router.get('/aspirant/profil', authMiddleware, async (req, res) => {
     // Adaptation selon ta table et ta structure
     const query = `
       SELECT nom, prenom, grade, choix_div, status_choix, motivations
-      FROM aspirants
+      FROM users
       WHERE id = $1
     `;
     const result = await pool.query(query, [aspirantId]);
