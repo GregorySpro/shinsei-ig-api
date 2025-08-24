@@ -18,7 +18,7 @@ router.get('/aspirant/profil', authMiddleware, async (req, res) => {
 
     // Adaptation selon ta table et ta structure
     const query = `
-      SELECT nom, prenom, grade, choix_div, status_choix, motivations
+      SELECT nom, prenom, rang, choix_div, status_choix, motivations
       FROM users
       WHERE id = $1
     `;
