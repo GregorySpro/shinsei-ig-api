@@ -77,5 +77,43 @@ router.get('/all', authMiddleware, async (req, res) => {
   }
 });
 
+router.get('/division', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id_user; // ou req.user.user_id selon ce que ton middleware set
+
+    // Récupérer la division de l'utilisateur
+    const userDivisionResult = await pool.query(
+      'SELECT division FROM users WHERE id_user = $1',
+      [userId]
+    );
+
+    if (userDivisionResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+
+    const userDivision = userDivisionResult.rows[0].division;
+
+    // Récupérer les annonces de type 'division' qui correspondent à la division de l'utilisateur
+    const annoncesResult = await pool.query(`
+      SELECT 
+        a.titre_annonce,
+        a.content_annonce,
+        a.date,
+        a.heure,
+        u.prenom,
+        u.nom
+      FROM annonces a
+      JOIN users u ON a.userid = u.id_user
+      WHERE a.type_annonce = 'division' AND a.division = $1
+      ORDER BY a.date DESC, a.heure DESC
+    `, [userDivision]);
+
+    res.status(200).json(annoncesResult.rows);
+  } catch (error) {
+    console.error('Erreur DB complète:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
 
 module.exports = router;
