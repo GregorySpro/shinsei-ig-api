@@ -83,7 +83,7 @@ router.get('/division', authMiddleware, async (req, res) => {
 
     // Récupérer la division de l'utilisateur
     const userDivisionResult = await pool.query(
-      'SELECT division FROM users WHERE id_user = $1',
+      'SELECT division FROM users WHERE identifiant = $1',
       [identifiant]
     );
 
