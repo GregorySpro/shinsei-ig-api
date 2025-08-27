@@ -32,7 +32,7 @@ router.get('/simple', authMiddleware, async (req, res) => {
   }
 });
 
-router.get('/globale', authMiddleware, async (req, res) => {
+router.get('/global', authMiddleware, async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
@@ -44,7 +44,7 @@ router.get('/globale', authMiddleware, async (req, res) => {
         u.nom
       FROM annonces a
       JOIN users u ON a.userid = u.id_user
-      WHERE a.type_annonce = 'globale'
+      WHERE a.type_annonce = 'global'
       ORDER BY a.date DESC, a.heure DESC
     `);
 

@@ -41,7 +41,7 @@ const registerAspirantRoute = require('./routes/register_aspirant');
 app.use('/api', registerAspirantRoute); // La route sera disponible à /api/register_aspirant
 
 const annoncesRoutes = require('./routes/annonces');
-app.use('/annonces', annoncesRoutes); //récupère les annonces simples
+app.use('/annonces', annoncesRoutes); //récupère les annonces
 
 const aspirantRoutes = require('./routes/aspirant');
 app.use('/api', aspirantRoutes);  // <-- Ajout de la route aspirant
