@@ -32,5 +32,28 @@ router.get('/simple', authMiddleware, async (req, res) => {
   }
 });
 
+router.get('/globale', authMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+        a.titre_annonce,
+        a.content_annonce,
+        a.date,
+        a.heure,
+        u.prenom,
+        u.nom
+      FROM annonces a
+      JOIN users u ON a.userid = u.id_user
+      WHERE a.type_annonce = 'globale'
+      ORDER BY a.date DESC, a.heure DESC
+    `);
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Erreur DB complète:', error); // <== ici
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
 
 module.exports = router;
