@@ -98,6 +98,7 @@ router.get('/division', authMiddleware, async (req, res) => {
       SELECT 
         a.titre_annonce,
         a.content_annonce,
+        a.division,
         a.date,
         a.heure,
         u.prenom,
