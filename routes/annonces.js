@@ -79,7 +79,7 @@ router.get('/all', authMiddleware, async (req, res) => {
 
 router.get('/division', authMiddleware, async (req, res) => {
   try {
-    const userId = req.user.id_user; // ou req.user.user_id selon ce que ton middleware set
+    const userId = req.user.identifiant; // ou req.user.user_id selon ce que ton middleware set
 
     // Récupérer la division de l'utilisateur
     const userDivisionResult = await pool.query(
