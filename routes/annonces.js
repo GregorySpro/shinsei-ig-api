@@ -79,12 +79,12 @@ router.get('/all', authMiddleware, async (req, res) => {
 
 router.get('/division', authMiddleware, async (req, res) => {
   try {
-    const userId = req.user.identifiant; // ou req.user.user_id selon ce que ton middleware set
+    const identifiant = req.user.identifiant; // ou req.user.user_id selon ce que ton middleware set
 
     // Récupérer la division de l'utilisateur
     const userDivisionResult = await pool.query(
       'SELECT division FROM users WHERE id_user = $1',
-      [userId]
+      [identifiant]
     );
 
     if (userDivisionResult.rows.length === 0) {
