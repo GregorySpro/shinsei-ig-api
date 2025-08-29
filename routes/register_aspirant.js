@@ -43,7 +43,7 @@ router.post('/register_aspirant', async (req, res) => {
         $1, $2, $3, $3,
         $4, $5, $6,
         $7, 'en attente', 'Aspirant',
-        TRUE, 1,
+        TRUE, NULL,
         FALSE, 'vivant'
       ) RETURNING id_user
     `;
