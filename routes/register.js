@@ -40,7 +40,7 @@ router.post('/register_acre', async (req, res) => {
         $1, $2, $3, $3,
         $4, $5, $6,
         NULL, 'en attente', '3e classe',
-        TRUE, 1,
+        TRUE, NULL,
         FALSE, 'vivant'
       ) RETURNING id_user, identifiant
     `;
