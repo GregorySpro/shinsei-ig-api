@@ -33,9 +33,6 @@ app.use('/api', registerRoute);
 const loginRoute = require('./routes/login');
 app.use('/api', loginRoute);
 
-const profileRoute = require('./routes/profile');
-app.use('/api', profileRoute);
-
 // Ajout de la nouvelle route pour l'enregistrement d'un Aspirant
 const registerAspirantRoute = require('./routes/register_aspirant');
 app.use('/api', registerAspirantRoute); // La route sera disponible à /api/register_aspirant
