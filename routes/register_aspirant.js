@@ -11,8 +11,8 @@ const pool = new Pool({
 router.post('/register_aspirant', async (req, res) => {
   const { identifiant, password, prenom, nom, age, division, motivations } = req.body;
 
-  // Vérification des champs requis
-  if (!identifiant || !password || !prenom || !nom || !age || !division || !motivations) {
+  // Vérification des champs requis, en autorisant 'nom' à être null
+  if (!identifiant || !password || !prenom || !age || !division || !motivations) {
     return res.status(400).json({ message: 'Champs requis manquants.' });
   }
 
@@ -48,9 +48,10 @@ router.post('/register_aspirant', async (req, res) => {
       ) RETURNING id_user
     `;
 
+    // Si 'nom' est non défini, on passe 'null' à la requête d'insertion
     const result = await client.query(insertQuery, [
       prenom,
-      nom,
+      nom || null, // Si 'nom' est absent, on envoie null
       age,
       division,
       identifiant,
