@@ -24,7 +24,7 @@ router.post('/rapports', authMiddleware, async (req, res) => {
         }
 
         // Récupération de la division de l'utilisateur
-        const userResult = await pool.query('SELECT division FROM users WHERE id = $1', [userId]);
+        const userResult = await pool.query('SELECT division FROM users WHERE id_user = $1', [userId]);
         if (userResult.rowCount === 0) {
             return res.status(404).json({ message: 'Utilisateur non trouvé.' });
         }
