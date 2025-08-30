@@ -105,6 +105,7 @@ router.get('/publics', async (req, res) => {
     try {
         const query = `
             SELECT
+                r.id_rapport,
                 r.titre,
                 r.contenu,
                 r.type,

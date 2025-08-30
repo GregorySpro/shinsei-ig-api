@@ -47,7 +47,7 @@ const divisionsRoutes = require('./routes/divisions');
 app.use('/api', divisionsRoutes);  // <-- Récupère les noms et descriptions des divisions pour les aspirants register
 
 const rapportRoute = require('./routes/rapports');
-app.use('/rapports', rapportRoute); // <-- Route pour créer un nouveau rapport
+app.use('/rapports', rapportRoute); // <-- Route pour créer et récupérer les rapports
 
 app.listen(port, () => {
   console.log(`API en écoute sur le port ${port}`);
