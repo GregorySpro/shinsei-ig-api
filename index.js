@@ -46,6 +46,9 @@ app.use('/api', aspirantRoutes);  // <-- Ajout de la route aspirant
 const divisionsRoutes = require('./routes/divisions');
 app.use('/api', divisionsRoutes);  // <-- Récupère les noms et descriptions des divisions pour les aspirants register
 
+const getDivisionsRoutes = require('./routes/get_division_user');
+app.use('/api', getDivisionsRoutes);  // <-- Récupère la division de l'utilisateur connecté)
+
 app.listen(port, () => {
   console.log(`API en écoute sur le port ${port}`);
 });
