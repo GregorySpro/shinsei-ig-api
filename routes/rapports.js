@@ -14,6 +14,7 @@ router.post('/rapports', authMiddleware, async (req, res) => {
     try {
         // L'ID de l'utilisateur est maintenant disponible via le middleware d'authentification
         const userId = req.user.id;
+        console.log('ID utilisateur authentifié:', userId);
 
         // Récupération des données du corps de la requête
         const { titre, contenu, categorie, type, accreditations } = req.body;
