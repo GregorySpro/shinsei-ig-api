@@ -43,8 +43,8 @@ app.use('/annonces', annoncesRoutes); //récupère les annonces
 const aspirantRoutes = require('./routes/aspirant');
 app.use('/api', aspirantRoutes);  // <-- Ajout de la route aspirant
 
-const divisionsRoutes = require('./routes/division');
-app.use('/api', aspirantRoutes);  // <-- Récupère les noms et descriptions des divisions pour les aspirants register
+const divisionsRoutes = require('./routes/divisions');
+app.use('/api', divisionsRoutes);  // <-- Récupère les noms et descriptions des divisions pour les aspirants register
 
 app.listen(port, () => {
   console.log(`API en écoute sur le port ${port}`);
