@@ -86,12 +86,14 @@ router.get('/division', authMiddleware, async (req, res) => {
             'SELECT division FROM users WHERE identifiant = $1',
             [identifiant]
         );
+        console.log('userDivisionResult:', userDivisionResult); // Pour déboguer
 
         if (userDivisionResult.rows.length === 0) {
             return res.status(404).json({ message: 'Utilisateur non trouvé' });
         }
         
         const userDivisionId = userDivisionResult.rows[0].division;
+        console.log('userDivisionId:', userDivisionId); // Pour déboguer
 
         // Étape 2: Récupérer le labelle de la division
         const divisionLabelResult = await pool.query(
