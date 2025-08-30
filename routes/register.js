@@ -12,7 +12,8 @@ const pool = new Pool({
 router.post('/register_acre', async (req, res) => {
   const { identifiant, password, prenom, nom, age, division } = req.body;
 
-  if (!identifiant || !password || !prenom || !nom || !age || !division) {
+  // Vérification des champs requis, en autorisant 'nom' à être null
+  if (!identifiant || !password || !prenom || !age || !division) {
     return res.status(400).json({ message: 'Champs requis manquants.' });
   }
 
@@ -29,6 +30,7 @@ router.post('/register_acre', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Insertion avec 'nom' pouvant être null si non envoyé
     const insertQuery = `
       INSERT INTO users (
         prenom, nom, age_creation, age_actuel,
@@ -47,7 +49,7 @@ router.post('/register_acre', async (req, res) => {
 
     const result = await client.query(insertQuery, [
       prenom,
-      nom,
+      nom || null,  // Si 'nom' est absent, on envoie null
       age,
       division,
       identifiant,
