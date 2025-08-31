@@ -183,6 +183,7 @@ router.get('/mes-rapports', authMiddleware, async (req, res) => {
     try {
         // L'ID de l'utilisateur est récupéré du middleware d'authentification
         const userId = req.user.id_user;
+        console.log('Récupération des rapports pour l\'utilisateur ID:', userId);
 
         // Requête pour récupérer tous les rapports de l'utilisateur
         const query = `
