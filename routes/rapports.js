@@ -101,7 +101,7 @@ router.post('/rapports', authMiddleware, async (req, res) => {
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Nouvelle route GET pour récupérer les rapports publics
-router.get('/publics', async (req, res) => {
+router.get('/publics', authMiddleware, async (req, res) => {
     try {
         const query = `
             SELECT
