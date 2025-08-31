@@ -179,4 +179,50 @@ router.get('/division', authMiddleware, async (req, res) => {
 });
 
 
+router.get('/mes-rapports', authMiddleware, async (req, res) => {
+    try {
+        // L'ID de l'utilisateur est récupéré du middleware d'authentification
+        const userId = req.user.id_user;
+
+        // Requête pour récupérer tous les rapports de l'utilisateur
+        const query = `
+            SELECT
+                r.id_rapport,
+                r.titre,
+                r.contenu,
+                r.type,
+                r.date_creation,
+                r.categorie,
+                r.division,
+                u.prenom,
+                u.nom
+            FROM
+                rapports AS r
+            LEFT JOIN
+                users AS u ON r.id_createur = u.id_user
+            WHERE
+                r.id_createur = $1;
+        `;
+
+        const { rows } = await pool.query(query, [userId]);
+        
+        // Si aucun rapport n'est trouvé, renvoyer un tableau vide avec un message
+        if (rows.length === 0) {
+            return res.status(200).json({
+                message: "L'utilisateur n'a créé aucun rapport.",
+                reports: []
+            });
+        }
+
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des rapports de l\'utilisateur :', error);
+        res.status(500).json({
+            message: 'Erreur serveur lors de la récupération de vos rapports.',
+            error: error.message
+        });
+    }
+});
+
+
 module.exports = router;
