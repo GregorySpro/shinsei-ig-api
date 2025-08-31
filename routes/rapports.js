@@ -164,7 +164,7 @@ router.get('/division', authMiddleware, async (req, res) => {
             LEFT JOIN
                 users AS u ON r.id_createur = u.id_user
             INNER JOIN 
-                divisions AS d ON r.division = d.id_division
+                divisions AS d ON r.division = d.id_div
             WHERE
                 r.categorie = 'division' AND r.division = $1;
         `;
