@@ -182,8 +182,17 @@ router.get('/division', authMiddleware, async (req, res) => {
 router.get('/mes-rapports', authMiddleware, async (req, res) => {
     try {
         // L'ID de l'utilisateur est récupéré du middleware d'authentification
-        const userId = req.user.id_user;
-        console.log('Récupération des rapports pour l\'utilisateur ID:', userId);
+        const userIdentifiant = req.user.identifiant;
+        console.log('Récupération des rapports pour l\'utilisateur ID:', userIdentifiant);
+
+        // Étape 1: Récupérer l'id_user
+        const userResult = await pool.query('SELECT id_user FROM users WHERE identifiant = $1', [userIdentifiant]);
+        if (userResult.rowCount === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+        }
+        const userId = userResult.rows[0].id_user;
+
+
 
         // Requête pour récupérer tous les rapports de l'utilisateur
         const query = `
