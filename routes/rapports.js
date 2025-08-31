@@ -157,6 +157,7 @@ router.get('/division', authMiddleware, async (req, res) => {
                 r.categorie,
                 u.prenom,
                 u.nom
+                u.division
             FROM
                 rapports AS r
             LEFT JOIN
