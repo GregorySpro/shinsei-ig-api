@@ -36,7 +36,6 @@ router.post('/rapports', authMiddleware, async (req, res) => {
         console.log('ID utilisateur pour DB:', userId);
         console.log('ID de la division:', userDivisionId);
 
-
         // Logique conditionnelle pour les données de la base de données
         let reportDivision = null;
         let reportAccreditations = null;
@@ -59,19 +58,19 @@ router.post('/rapports', authMiddleware, async (req, res) => {
 
         // Insertion des données dans la base de données avec l'id_user
         const query = `
-                        INSERT INTO rapports (
-                            titre,
-                            contenu,
-                            categorie,
-                            type,
-                            id_createur,
-                            division,
-                            destinataires,
-                            brouillon
-                        )
-                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-                        RETURNING *;
-                    `;
+            INSERT INTO rapports (
+                titre,
+                contenu,
+                categorie,
+                type,
+                id_createur,
+                division,
+                destinataires,
+                brouillon
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            RETURNING *;
+        `;
 
         const values = [
             titre,
@@ -101,7 +100,7 @@ router.post('/rapports', authMiddleware, async (req, res) => {
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Nouvelle route GET pour récupérer les rapports publics
-router.get('/publics', authMiddleware, async (res) => {
+router.get('/publics', authMiddleware, async (req, res) => {
     try {
         const query = `
             SELECT
@@ -135,48 +134,48 @@ router.get('/publics', authMiddleware, async (res) => {
 // Nouvelle route GET pour récupérer les rapports de la division de l'utilisateur
 // Utilisation du middleware d'authentification pour obtenir l'ID utilisateur
 router.get('/division', authMiddleware, async (req, res) => {
-    try {
-        // L'ID de l'utilisateur est accessible via req.user grâce à authMiddleware
-        const userIdentifiant = req.user.identifiant;
+    try {
+        // L'ID de l'utilisateur est accessible via req.user grâce à authMiddleware
+        const userIdentifiant = req.user.identifiant;
 
-        // Étape 1: Récupérer la division de l'utilisateur
-        const userResult = await pool.query('SELECT division FROM users WHERE identifiant = $1', [userIdentifiant]);
-        if (userResult.rowCount === 0) {
-            return res.status(404).json({ message: 'Division de l\'utilisateur non trouvée.' });
-        }
-        const userDivision = userResult.rows[0].division;
+        // Étape 1: Récupérer la division de l'utilisateur
+        const userResult = await pool.query('SELECT division FROM users WHERE identifiant = $1', [userIdentifiant]);
+        if (userResult.rowCount === 0) {
+            return res.status(404).json({ message: 'Division de l\'utilisateur non trouvée.' });
+        }
+        const userDivision = userResult.rows[0].division;
 
-        // Étape 2: Récupérer les rapports de la catégorie 'division' pour la division de l'utilisateur avec le label de la division
-        const query = `
-            SELECT
-                r.id_rapport,
-                r.titre,
-                r.contenu,
-                r.type,
-                r.id_createur,
-                r.categorie,
-                r.division,
-                u.prenom,
-                u.nom,
+        // Étape 2: Récupérer les rapports de la catégorie 'division' pour la division de l'utilisateur avec le label de la division
+        const query = `
+            SELECT
+                r.id_rapport,
+                r.titre,
+                r.contenu,
+                r.type,
+                r.id_createur,
+                r.categorie,
+                r.division,
+                u.prenom,
+                u.nom,
                 d.labelle_division
-            FROM
-                rapports AS r
-            LEFT JOIN
-                users AS u ON r.id_createur = u.id_user
-            INNER JOIN 
+            FROM
+                rapports AS r
+            LEFT JOIN
+                users AS u ON r.id_createur = u.id_user
+            INNER JOIN 
                 divisions AS d ON r.division = d.id_div
-            WHERE
-                r.categorie = 'division' AND r.division = $1;
-        `;
-        const { rows } = await pool.query(query, [userDivision]);
-        res.status(200).json(rows);
-    } catch (error) {
-        console.error('Erreur lors de la récupération des rapports de division :', error);
-        res.status(500).json({
-            message: 'Erreur serveur lors de la récupération des rapports de division.',
-            error: error.message
-        });
-    }
+            WHERE
+                r.categorie = 'division' AND r.division = $1;
+        `;
+        const { rows } = await pool.query(query, [userDivision]);
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des rapports de division :', error);
+        res.status(500).json({
+            message: 'Erreur serveur lors de la récupération des rapports de division.',
+            error: error.message
+        });
+    }
 });
 
 
