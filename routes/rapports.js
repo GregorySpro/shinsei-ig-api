@@ -191,7 +191,6 @@ router.get('/mes-rapports', authMiddleware, async (req, res) => {
                 r.titre,
                 r.contenu,
                 r.type,
-                r.date_creation,
                 r.categorie,
                 r.division,
                 u.prenom,
