@@ -49,6 +49,9 @@ app.use('/api', divisionsRoutes);  // <-- Récupère les noms et descriptions de
 const rapportRoute = require('./routes/rapports');
 app.use('/rapports', rapportRoute); // <-- Route pour créer et récupérer les rapports
 
+const acreditationsRoute = require('./routes/acreditations');
+app.use('/acreditations', acreditationsRoute); // <-- Route pour récupérer les accréditations
+
 app.listen(port, () => {
   console.log(`API en écoute sur le port ${port}`);
 });
