@@ -49,7 +49,7 @@ router.get('/get_user_acre', authMiddleware, async (req, res) => {
     // 3. Récupérer les libellés d'accréditation en utilisant le nom de la table
     // et le tableau d'IDs
     const acredsResult = await pool.query(
-      `SELECT labelle_accre FROM ${tableName} WHERE id_acre = ANY($1)`,
+      `SELECT labelle_accre FROM ${tableName} WHERE id_accre = ANY($1)`,
       [userAcreds]
     );
 
