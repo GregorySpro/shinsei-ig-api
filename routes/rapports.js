@@ -150,7 +150,7 @@ router.get('/division', authMiddleware, async (req, res) => {
             return res.status(404).json({ message: 'Division de l\'utilisateur non trouvée.' });
         }
         const userDivision = userResult.rows[0].division;
-        const userAcreds = userResult.rows[0].niveau_accreditation || [];
+        const userAcreds = userResult.rows[0].niveau_accreditation || []; // S'assurer que c'est un tableau, même s'il est null
 
         // Étape 2: Récupérer le nom de la table d'accréditation en fonction de la division
         const divisionResult = await pool.query('SELECT table_acre FROM divisions WHERE id_div = $1', [userDivision]);
@@ -189,11 +189,11 @@ router.get('/division', authMiddleware, async (req, res) => {
                 INNER JOIN 
                     divisions AS d ON r.division = d.id_div
                 LEFT JOIN 
-                    ${tableName} AS acre ON r.destinataires = acre.id_accre
+                    ${tableName} AS acre ON acre.id_accre = ANY(r.destinataires)
                 WHERE
                     (r.categorie = 'division' AND r.division = $1)
                 OR
-                    (r.categorie = 'acreditation' AND r.destinataires = ANY($2));
+                    (r.categorie = 'acreditation' AND r.destinataires && $2);
             `;
             queryParams = [userDivision, userAcreds];
         } else {
