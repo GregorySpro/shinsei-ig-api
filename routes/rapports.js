@@ -48,6 +48,7 @@ router.post('/rapports', authMiddleware, async (req, res) => {
                 if (!accreditations || !Array.isArray(accreditations)) {
                     return res.status(400).json({ message: 'Les accréditations doivent être fournies sous forme de tableau.' });
                 }
+                reportDivision = userDivisionId
                 reportAccreditations = accreditations;
                 break;
             case 'publique':
@@ -244,3 +245,4 @@ router.get('/mes-rapports', authMiddleware, async (req, res) => {
 
 
 module.exports = router;
+
