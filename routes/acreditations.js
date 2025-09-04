@@ -98,7 +98,7 @@ router.get('/get_division_acre', authMiddleware, async (req, res) => {
     // 3. Récupérer les libellés d'accréditation en utilisant le nom de la table
     // et le tableau d'IDs
     const acredsResult = await pool.query(
-      `SELECT labelle_accre FROM ${tableName}`
+      `SELECT id_accre, labelle_accre FROM ${tableName}`
     );
 
     res.status(200).json(acredsResult.rows);
