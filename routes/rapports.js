@@ -142,45 +142,95 @@ router.get('/publics', authMiddleware, async (req, res) => {
 // Utilisation du middleware d'authentification pour obtenir l'ID utilisateur
 router.get('/division', authMiddleware, async (req, res) => {
     try {
-        // L'ID de l'utilisateur est accessible via req.user grâce à authMiddleware
         const userIdentifiant = req.user.identifiant;
 
-        // Étape 1: Récupérer la division de l'utilisateur
-        const userResult = await pool.query('SELECT division FROM users WHERE identifiant = $1', [userIdentifiant]);
+        // Étape 1: Récupérer la division et les accréditations de l'utilisateur
+        const userResult = await pool.query('SELECT division, niveau_accreditation FROM users WHERE identifiant = $1', [userIdentifiant]);
         if (userResult.rowCount === 0) {
             return res.status(404).json({ message: 'Division de l\'utilisateur non trouvée.' });
         }
         const userDivision = userResult.rows[0].division;
+        const userAcreds = userResult.rows[0].niveau_accreditation || []; // S'assurer que c'est un tableau, même s'il est null
 
-        // Étape 2: Récupérer les rapports de la catégorie 'division' pour la division de l'utilisateur avec le label de la division
-        const query = `
-            SELECT
-                r.id_rapport,
-                r.titre,
-                r.contenu,
-                r.type,
-                r.id_createur,
-                r.categorie,
-                r.division,
-                r.date_creation,
-                u.prenom,
-                u.nom,
-                d.labelle_division
-            FROM
-                rapports AS r
-            LEFT JOIN
-                users AS u ON r.id_createur = u.id_user
-            INNER JOIN 
-                divisions AS d ON r.division = d.id_div
-            WHERE
-                r.categorie = 'division' AND r.division = $1;
-        `;
-        const { rows } = await pool.query(query, [userDivision]);
+        // Étape 2: Récupérer le nom de la table d'accréditation en fonction de la division
+        const divisionResult = await pool.query('SELECT table_acre FROM divisions WHERE id_div = $1', [userDivision]);
+        if (divisionResult.rowCount === 0) {
+            return res.status(404).json({ message: 'Division de l\'utilisateur non trouvée.' });
+        }
+        const tableName = divisionResult.rows[0].table_acre;
+
+        // Étape 3: Créer la requête pour récupérer les rapports de 'division' et 'accreditation'
+        let query;
+        let queryParams;
+
+        // Si l'utilisateur a des accréditations, inclure les rapports d'accréditation dans la requête
+        if (userAcreds.length > 0) {
+            query = `
+                SELECT
+                    r.id_rapport,
+                    r.titre,
+                    r.contenu,
+                    r.type,
+                    r.id_createur,
+                    r.categorie,
+                    r.division,
+                    r.date_creation,
+                    u.prenom,
+                    u.nom,
+                    d.labelle_division,
+                    CASE
+                        WHEN r.categorie = 'acreditation' THEN acre.labelle_accre
+                        ELSE NULL
+                    END AS labelle_accre
+                FROM
+                    rapports AS r
+                LEFT JOIN
+                    users AS u ON r.id_createur = u.id_user
+                INNER JOIN 
+                    divisions AS d ON r.division = d.id_div
+                LEFT JOIN 
+                    ${tableName} AS acre ON r.id_accreditation = acre.id_accre
+                WHERE
+                    (r.categorie = 'division' AND r.division = $1)
+                OR
+                    (r.categorie = 'acreditation' AND r.id_accreditation = ANY($2));
+            `;
+            queryParams = [userDivision, userAcreds];
+        } else {
+            // Si l'utilisateur n'a pas d'accréditations, ne récupérer que les rapports de division
+            query = `
+                SELECT
+                    r.id_rapport,
+                    r.titre,
+                    r.contenu,
+                    r.type,
+                    r.id_createur,
+                    r.categorie,
+                    r.division,
+                    r.date_creation,
+                    u.prenom,
+                    u.nom,
+                    d.labelle_division,
+                    NULL AS labelle_accre
+                FROM
+                    rapports AS r
+                LEFT JOIN
+                    users AS u ON r.id_createur = u.id_user
+                INNER JOIN 
+                    divisions AS d ON r.division = d.id_div
+                WHERE
+                    r.categorie = 'division' AND r.division = $1;
+            `;
+            queryParams = [userDivision];
+        }
+        
+        const { rows } = await pool.query(query, queryParams);
         res.status(200).json(rows);
+
     } catch (error) {
-        console.error('Erreur lors de la récupération des rapports de division :', error);
+        console.error('Erreur lors de la récupération des rapports :', error);
         res.status(500).json({
-            message: 'Erreur serveur lors de la récupération des rapports de division.',
+            message: 'Erreur serveur lors de la récupération des rapports.',
             error: error.message
         });
     }
