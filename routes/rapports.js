@@ -189,11 +189,11 @@ router.get('/division', authMiddleware, async (req, res) => {
                 INNER JOIN 
                     divisions AS d ON r.division = d.id_div
                 LEFT JOIN 
-                    ${tableName} AS acre ON r.id_accreditation = acre.id_accre
+                    ${tableName} AS acre ON r.destinataires = acre.id_accre
                 WHERE
                     (r.categorie = 'division' AND r.division = $1)
                 OR
-                    (r.categorie = 'acreditation' AND r.id_accreditation = ANY($2));
+                    (r.categorie = 'acreditation' AND r.destinataires = ANY($2));
             `;
             queryParams = [userDivision, userAcreds];
         } else {
