@@ -179,7 +179,7 @@ router.get('/division', authMiddleware, async (req, res) => {
                     u.nom,
                     d.labelle_division,
                     CASE
-                        WHEN r.categorie = 'acreditations' THEN acre.labelle_accre
+                        WHEN r.categorie = 'accreditations' THEN acre.labelle_accre
                         ELSE NULL
                     END AS labelle_accre
                 FROM
