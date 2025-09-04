@@ -13,11 +13,11 @@ const pool = new Pool({
 
 router.get('/get_user_acre', authMiddleware, async (req, res) => {
   try {
-    const userId = req.user.id; // Supposons que l'ID de l'utilisateur est stocké dans req.user.id après le middleware d'authentification.
+    const userId = req.user.identifiant; // Supposons que l'ID de l'utilisateur est stocké dans req.user.id après le middleware d'authentification.
     
     // 1. Récupérer la division et les accréditations de l'utilisateur
     const userResult = await pool.query(
-      `SELECT division, niveau_accreditation FROM users WHERE id_user = $1`,
+      `SELECT division, niveau_accreditation FROM users WHERE identifiant = $1`,
       [userId]
     );
 
