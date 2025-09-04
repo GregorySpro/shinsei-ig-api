@@ -150,7 +150,7 @@ router.get('/division', authMiddleware, async (req, res) => {
             return res.status(404).json({ message: 'Division de l\'utilisateur non trouvée.' });
         }
         const userDivision = userResult.rows[0].division;
-        const userAcreds = userResult.rows[0].niveau_accreditation || []; // S'assurer que c'est un tableau, même s'il est null
+        const userAcreds = userResult.rows[0].niveau_accreditation || [];
 
         // Étape 2: Récupérer le nom de la table d'accréditation en fonction de la division
         const divisionResult = await pool.query('SELECT table_acre FROM divisions WHERE id_div = $1', [userDivision]);
