@@ -205,10 +205,13 @@ router.get('/mes-rapports', authMiddleware, async (req, res) => {
                 r.division,
                 u.prenom,
                 u.nom
+                d.labelle_division
             FROM
                 rapports AS r
             LEFT JOIN
                 users AS u ON r.id_createur = u.id_user
+            INNER JOIN 
+                divisions AS d ON r.division = d.id_div
             WHERE
                 r.id_createur = $1;
         `;
