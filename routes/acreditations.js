@@ -101,7 +101,7 @@ router.get('/get_division_acre', authMiddleware, async (req, res) => {
       `SELECT labelle_accre FROM ${tableName}`
     );
 
-    res.status(200).json(labels);
+    res.status(200).json(acredsResult.rows);
   } catch (error) {
     console.error('Erreur DB:', error);
     res.status(500).json({ message: 'Erreur serveur' });
