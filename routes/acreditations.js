@@ -53,10 +53,7 @@ router.get('/get_user_acre', authMiddleware, async (req, res) => {
       [userAcreds]
     );
 
-    // Extraction des libellés dans un tableau simple pour la réponse
-    const labels = acredsResult.rows.map(row => row.labelle_accre);
-
-    res.status(200).json(labels);
+    res.status(200).json(acredsResult.rows);
   } catch (error) {
     console.error('Erreur DB:', error);
     res.status(500).json({ message: 'Erreur serveur' });
