@@ -195,7 +195,7 @@ router.get('/division', authMiddleware, async (req, res) => {
                 WHERE
                     (r.categorie = 'division' AND r.division = $1)
                 OR
-                    (r.categorie = 'acreditation' AND r.destinataires && $2);
+                    (r.categorie = 'accreditations' AND r.destinataires && $2);
             `;
             console.log(query);
             queryParams = [userDivision, userAcreds];
