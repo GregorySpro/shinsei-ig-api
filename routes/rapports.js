@@ -151,7 +151,6 @@ router.get('/division', authMiddleware, async (req, res) => {
         }
         const userDivision = userResult.rows[0].division;
         const userAcreds = userResult.rows[0].niveau_accreditation || []; // S'assurer que c'est un tableau, même s'il est null
-        console.log('acreditations de lutilisateur', userAcreds);
 
         // Étape 2: Récupérer le nom de la table d'accréditation en fonction de la division
         const divisionResult = await pool.query('SELECT table_acre FROM divisions WHERE id_div = $1', [userDivision]);
@@ -180,7 +179,7 @@ router.get('/division', authMiddleware, async (req, res) => {
                     u.nom,
                     d.labelle_division,
                     CASE
-                        WHEN r.categorie = 'acreditation' THEN acre.labelle_accre
+                        WHEN r.categorie = 'acreditations' THEN acre.labelle_accre
                         ELSE NULL
                     END AS labelle_accre
                 FROM
