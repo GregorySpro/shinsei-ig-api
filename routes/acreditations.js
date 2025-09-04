@@ -63,4 +63,49 @@ router.get('/get_user_acre', authMiddleware, async (req, res) => {
   }
 });
 
+
+
+
+router.get('/get_division_acre', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.identifiant; // Supposons que l'ID de l'utilisateur est stocké dans req.user.id après le middleware d'authentification.
+    
+    // 1. Récupérer la division et les accréditations de l'utilisateur
+    const userResult = await pool.query(
+      `SELECT division FROM users WHERE identifiant = $1`,
+      [userId]
+    );
+
+    if (userResult.rowCount === 0) {
+      return res.status(404).json({ message: "Utilisateur non trouvé." });
+    }
+
+    const userData = userResult.rows[0];
+    const userDivision = userData.division;
+
+    // 2. Récupérer le nom de la table d'accréditation en fonction de la division
+    const divisionResult = await pool.query(
+      `SELECT table_acre FROM divisions WHERE id_div = $1`,
+      [userDivision]
+    );
+
+    if (divisionResult.rowCount === 0) {
+      return res.status(404).json({ message: "Division non trouvée." });
+    }
+
+    const tableName = divisionResult.rows[0].table_acre;
+
+    // 3. Récupérer les libellés d'accréditation en utilisant le nom de la table
+    // et le tableau d'IDs
+    const acredsResult = await pool.query(
+      `SELECT labelle_accre FROM ${tableName}`
+    );
+
+    res.status(200).json(labels);
+  } catch (error) {
+    console.error('Erreur DB:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
 module.exports = router;
