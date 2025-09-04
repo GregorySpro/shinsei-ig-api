@@ -56,6 +56,9 @@ router.post('/rapports', authMiddleware, async (req, res) => {
                 return res.status(400).json({ message: 'Catégorie de rapport invalide.' });
         }
 
+        // Ajout de la date de création
+        const date_creation = new Date();
+
         // Insertion des données dans la base de données avec l'id_user
         const query = `
             INSERT INTO rapports (
@@ -66,9 +69,10 @@ router.post('/rapports', authMiddleware, async (req, res) => {
                 id_createur,
                 division,
                 destinataires,
-                brouillon
+                brouillon,
+                date_creation
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
             RETURNING *;
         `;
 
@@ -80,7 +84,8 @@ router.post('/rapports', authMiddleware, async (req, res) => {
             userId, // Correction ici : On utilise l'id_user
             reportDivision,
             reportAccreditations,
-            false
+            false,
+            date_creation // Ajout de la date de création
         ];
 
         const newReport = await pool.query(query, values);
@@ -109,6 +114,7 @@ router.get('/publics', authMiddleware, async (req, res) => {
                 r.contenu,
                 r.type,
                 r.id_createur,
+                r.date_creation,
                 u.prenom,
                 u.nom
             FROM
@@ -155,6 +161,7 @@ router.get('/division', authMiddleware, async (req, res) => {
                 r.id_createur,
                 r.categorie,
                 r.division,
+                r.date_creation,
                 u.prenom,
                 u.nom,
                 d.labelle_division
@@ -201,6 +208,7 @@ router.get('/mes-rapports', authMiddleware, async (req, res) => {
                 r.type,
                 r.categorie,
                 r.division,
+                r.date_creation,
                 d.labelle_division,  -- On ajoute la colonne labelle_division ici
                 u.prenom,
                 u.nom
