@@ -151,6 +151,7 @@ router.get('/division', authMiddleware, async (req, res) => {
         }
         const userDivision = userResult.rows[0].division;
         const userAcreds = userResult.rows[0].niveau_accreditation || []; // S'assurer que c'est un tableau, même s'il est null
+        console.log(userAcreds.length);
 
         // Étape 2: Récupérer le nom de la table d'accréditation en fonction de la division
         const divisionResult = await pool.query('SELECT table_acre FROM divisions WHERE id_div = $1', [userDivision]);
@@ -158,6 +159,7 @@ router.get('/division', authMiddleware, async (req, res) => {
             return res.status(404).json({ message: 'Division de l\'utilisateur non trouvée.' });
         }
         const tableName = divisionResult.rows[0].table_acre;
+        console.log('Table d\'accréditation pour la division:', tableName);
 
         // Étape 3: Créer la requête pour récupérer les rapports de 'division' et 'accreditation'
         let query;
@@ -195,6 +197,7 @@ router.get('/division', authMiddleware, async (req, res) => {
                 OR
                     (r.categorie = 'acreditation' AND r.destinataires && $2);
             `;
+            console.log(query);
             queryParams = [userDivision, userAcreds];
         } else {
             // Si l'utilisateur n'a pas d'accréditations, ne récupérer que les rapports de division
