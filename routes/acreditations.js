@@ -36,7 +36,7 @@ router.get('/get_user_acre', authMiddleware, async (req, res) => {
 
     // 2. Récupérer le nom de la table d'accréditation en fonction de la division
     const divisionResult = await pool.query(
-      `SELECT table_acre FROM division WHERE id_div = $1`,
+      `SELECT table_acre FROM divisions WHERE id_div = $1`,
       [userDivision]
     );
 
