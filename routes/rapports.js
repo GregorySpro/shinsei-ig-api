@@ -204,7 +204,7 @@ router.get('/mes-rapports', authMiddleware, async (req, res) => {
                 r.categorie,
                 r.division,
                 u.prenom,
-                u.nom
+                u.nom,
                 d.labelle_division
             FROM
                 rapports AS r
