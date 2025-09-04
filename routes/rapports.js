@@ -192,9 +192,7 @@ router.get('/mes-rapports', authMiddleware, async (req, res) => {
         }
         const userId = userResult.rows[0].id_user;
 
-
-
-        // Requête pour récupérer tous les rapports de l'utilisateur
+        // Requête pour récupérer tous les rapports de l'utilisateur avec le labelle_division
         const query = `
             SELECT
                 r.id_rapport,
@@ -203,12 +201,15 @@ router.get('/mes-rapports', authMiddleware, async (req, res) => {
                 r.type,
                 r.categorie,
                 r.division,
+                d.labelle_division,  -- On ajoute la colonne labelle_division ici
                 u.prenom,
                 u.nom
             FROM
                 rapports AS r
             LEFT JOIN
                 users AS u ON r.id_createur = u.id_user
+            LEFT JOIN
+                divisions AS d ON r.division = d.id_div  -- Jointure avec la table divisions
             WHERE
                 r.id_createur = $1;
         `;
