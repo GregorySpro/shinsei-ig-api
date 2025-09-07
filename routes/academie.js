@@ -47,7 +47,7 @@ router.post('/academie/valider', authMiddleware, async (req, res) => {
 
     // 2. Mettre à jour le statut dans la table "academie"
     const updateResult = await pool.query(
-      `UPDATE academie SET statut_candid = 'Réussite' WHERE id_user = $1 RETURNING *`,
+      `UPDATE academie SET status_candid = 'Réussite' WHERE id_user = $1 RETURNING *`,
       [id_user]
     );
 
