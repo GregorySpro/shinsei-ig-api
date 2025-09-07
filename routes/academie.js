@@ -31,28 +31,25 @@ router.get('/academie/aspirants', authMiddleware, async (req, res) => {
 
 router.post('/academie/valider', authMiddleware, async (req, res) => {
   try {
-    const identifiant = req.user.identifiant;
+    // On ne prend plus l'identifiant du token (req.user.identifiant)
+    // On récupère l'id_aspirant depuis le corps de la requête
+    const { id_aspirant } = req.body;
 
-    // 1. Récupérer l'id_user à partir de la table "users"
-    const userResult = await pool.query(
-      `SELECT id_user FROM users WHERE identifiant = $1`,
-      [identifiant]
-    );
-
-    if (userResult.rows.length === 0) {
-      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    // Vérification de la présence du paramètre id_aspirant
+    if (!id_aspirant) {
+      return res.status(400).json({ message: 'Le paramètre id_aspirant est manquant.' });
     }
 
-    const id_user = userResult.rows[0].id_user;
-
-    // 2. Mettre à jour le statut dans la table "academie"
+    // 1. Mettre à jour le statut dans la table "academie" en utilisant id_aspirant
+    // Attention : J'ai supposé que id_aspirant correspond à id_academie dans la table academie.
+    // Si id_aspirant est en réalité l'id_user, la requête SQL doit être ajustée.
     const updateResult = await pool.query(
-      `UPDATE academie SET status_candid = 'Réussite' WHERE id_user = $1 RETURNING *`,
-      [id_user]
+      `UPDATE academie SET status_candid = 'Réussite' WHERE id_academie = $1 RETURNING *`,
+      [id_aspirant]
     );
 
     if (updateResult.rows.length === 0) {
-      return res.status(404).json({ message: 'Aspirant non trouvé pour cet utilisateur.' });
+      return res.status(404).json({ message: 'Aspirant non trouvé pour cet identifiant.' });
     }
 
     res.json(updateResult.rows[0]);
@@ -62,5 +59,7 @@ router.post('/academie/valider', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur.' });
   }
 });
+
+
 
 module.exports = router;
