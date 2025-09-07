@@ -12,8 +12,14 @@ router.get('/academie/aspirants', authMiddleware, async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
-          *
-      FROM academie
+          u.prenom,
+          u.nom,
+          u.rang,
+          a.note_qcm,
+          a.note_zanjutsu,
+          a.date_inscription
+      FROM academie a 
+        JOIN users u ON a.user_id = u.user_id
     `);
     
     res.json(result.rows);
