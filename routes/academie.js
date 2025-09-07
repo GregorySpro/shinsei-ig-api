@@ -72,7 +72,7 @@ router.put('/academie/:id/notes', authMiddleware, async (req, res) => {
 
     // 2. Mettez à jour les notes dans la table "academie"
     const updateResult = await pool.query(
-      `UPDATE academie SET note_qcm = $1, note_zanjutsu = $2 WHERE id_academie = $3 RETURNING *`,
+      `UPDATE academie SET note_qcm = $1, note_zanjutsu = $2 WHERE id_aspirant = $3 RETURNING *`,
       [note_qcm, note_zanjutsu, id]
     );
 
