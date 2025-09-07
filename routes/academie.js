@@ -44,7 +44,7 @@ router.post('/academie/valider', authMiddleware, async (req, res) => {
     // Attention : J'ai supposé que id_aspirant correspond à id_academie dans la table academie.
     // Si id_aspirant est en réalité l'id_user, la requête SQL doit être ajustée.
     const updateResult = await pool.query(
-      `UPDATE academie SET status_candid = 'Réussite' WHERE id_academie = $1 RETURNING *`,
+      `UPDATE academie SET status_candid = 'Réussite' WHERE id_aspirant= $1 RETURNING *`,
       [id_aspirant]
     );
 
