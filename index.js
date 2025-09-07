@@ -52,6 +52,9 @@ app.use('/rapports', rapportRoute); // <-- Route pour créer et récupérer les 
 const acreditationsRoute = require('./routes/acreditations');
 app.use('/acreditations', acreditationsRoute);
 
+const academieRoute = require('./routes/academie');
+app.use('/api', academieRoute); // <-- Route pour les fonctionnalités de l'académie
+
 app.listen(port, () => {
   console.log(`API en écoute sur le port ${port}`);
 });
