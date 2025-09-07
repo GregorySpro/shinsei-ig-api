@@ -12,16 +12,8 @@ router.get('/academie/aspirants', authMiddleware, async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
-          u.nom, 
-          u.prenom, 
-          u.age_actuel, 
-          u.rang, 
-          d.labelle_division, 
-          u.status_choix, 
-          u.motivations
-      FROM users u
-      JOIN divisions d ON u.choix_div = d.id_div
-      ORDER BY u.rang ASC
+          *
+      FROM academie
     `);
     
     res.json(result.rows);
