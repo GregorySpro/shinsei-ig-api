@@ -19,7 +19,7 @@ router.get('/academie/aspirants', authMiddleware, async (req, res) => {
           a.note_zanjutsu,
           a.date_inscription
       FROM academie a 
-        JOIN users u ON a.user_id = u.user_id
+        JOIN users u ON a.id_user = u.id_user
     `);
     
     res.json(result.rows);
