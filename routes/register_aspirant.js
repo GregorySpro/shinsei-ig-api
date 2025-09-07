@@ -68,10 +68,10 @@ router.post('/register_aspirant', async (req, res) => {
     
     // Insertion dans la table "academie" en utilisant l'ID de l'utilisateur
     const insertAcademieQuery = `
-      INSERT INTO academie (id_user, division)
-      VALUES ($1, $2)
+      INSERT INTO academie (id_user)
+      VALUES ($1)
     `;
-    await client.query(insertAcademieQuery, [newUserId, division]);
+    await client.query(insertAcademieQuery, [newUserId]);
 
     // Valide la transaction
     await client.query('COMMIT');
