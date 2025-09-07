@@ -11,7 +11,7 @@ const pool = new Pool({
 router.post('/register_aspirant', async (req, res) => {
   const { identifiant, password, prenom, nom, age, division, motivations } = req.body;
 
-  // Vérification des champs requis, en autorisant 'nom' à être null
+  // Vérification des champs requis
   if (!identifiant || !password || !prenom || !age || !division || !motivations) {
     return res.status(400).json({ message: 'Champs requis manquants.' });
   }
@@ -66,10 +66,10 @@ router.post('/register_aspirant', async (req, res) => {
     // Récupère l'ID du nouvel utilisateur
     const newUserId = userResult.rows[0].id_user;
     
-    // Insertion dans la table "academie" en utilisant l'ID de l'utilisateur
+    // Insertion dans la table "academie" en utilisant l'ID de l'utilisateur, la date actuelle et le statut d'élève
     const insertAcademieQuery = `
-      INSERT INTO academie (id_user)
-      VALUES ($1)
+      INSERT INTO academie (id_user, date_inscription, statut_eleve)
+      VALUES ($1, NOW(), TRUE)
     `;
     await client.query(insertAcademieQuery, [newUserId]);
 
@@ -83,7 +83,7 @@ router.post('/register_aspirant', async (req, res) => {
     });
 
   } catch (err) {
-    // En cas d'erreur, annule la transaction pour éviter les données incohérentes
+    // En cas d'erreur, annule la transaction
     await client.query('ROLLBACK');
     client.release();
     console.error('Erreur serveur :', err);
