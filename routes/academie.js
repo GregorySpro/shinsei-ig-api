@@ -29,4 +29,38 @@ router.get('/academie/aspirants', authMiddleware, async (req, res) => {
   }
 });
 
+router.post('/academie/valider', authMiddleware, async (req, res) => {
+  try {
+    const identifiant = req.user.identifiant;
+
+    // 1. Récupérer l'id_user à partir de la table "users"
+    const userResult = await pool.query(
+      `SELECT id_user FROM users WHERE identifiant = $1`,
+      [identifiant]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    }
+
+    const id_user = userResult.rows[0].id_user;
+
+    // 2. Mettre à jour le statut dans la table "academie"
+    const updateResult = await pool.query(
+      `UPDATE academie SET statut_candid = 'Réussite' WHERE id_user = $1 RETURNING *`,
+      [id_user]
+    );
+
+    if (updateResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Aspirant non trouvé pour cet utilisateur.' });
+    }
+
+    res.json(updateResult.rows[0]);
+
+  } catch (error) {
+    console.error('Erreur DB lors de la validation du candidat :', error);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+});
+
 module.exports = router;
