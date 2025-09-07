@@ -60,6 +60,36 @@ router.post('/academie/valider', authMiddleware, async (req, res) => {
   }
 });
 
+router.put('/academie/:id/notes', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params; // Récupère l'ID de l'aspirant depuis les paramètres de l'URL
+    const { note_qcm, note_zanjutsu } = req.body; // Récupère les notes depuis le corps de la requête
+
+    // 1. Vérifiez que les notes sont présentes et sont des nombres
+    if (note_qcm === undefined || note_zanjutsu === undefined || isNaN(note_qcm) || isNaN(note_zanjutsu)) {
+      return res.status(400).json({ message: 'Les notes de QCM et de Zanjutsu sont requises et doivent être des nombres.' });
+    }
+
+    // 2. Mettez à jour les notes dans la table "academie"
+    const updateResult = await pool.query(
+      `UPDATE academie SET note_qcm = $1, note_zanjutsu = $2 WHERE id_academie = $3 RETURNING *`,
+      [note_qcm, note_zanjutsu, id]
+    );
+
+    // 3. Vérifiez si une ligne a été mise à jour
+    if (updateResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Aspirant non trouvé pour cet identifiant.' });
+    }
+
+    // 4. Renvoie l'enregistrement mis à jour
+    res.json(updateResult.rows[0]);
+
+  } catch (error) {
+    console.error('Erreur DB lors de la mise à jour des notes :', error);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+});
+
 
 
 module.exports = router;
