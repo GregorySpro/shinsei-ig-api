@@ -66,9 +66,9 @@ router.post('/register_aspirant', async (req, res) => {
     // Récupère l'ID du nouvel utilisateur
     const newUserId = userResult.rows[0].id_user;
     
-    // Insertion dans la table "academie" en utilisant l'ID de l'utilisateur, la date actuelle et le statut d'élève
+    // Insertion dans la table "academie" en utilisant l'ID de l'utilisateur, la date actuelle et le status d'élève
     const insertAcademieQuery = `
-      INSERT INTO academie (id_user, date_inscription, statut_eleve)
+      INSERT INTO academie (id_user, date_inscription, status_eleve)
       VALUES ($1, NOW(), TRUE)
     `;
     await client.query(insertAcademieQuery, [newUserId]);
