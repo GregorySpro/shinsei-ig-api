@@ -22,4 +22,29 @@ router.get('/divisions', async (req, res) => {
   }
 });
 
+
+// ROUTE DES EFFECTIFS DE DIVISIONS
+
+router.get('/divisions/effectifs/1ere', async (req, res) => {
+  try {
+    //Recup les effectifs de la 1ere division
+    const result = await pool.query(`
+      SELECT
+        u.nom,
+        u.prenom,
+        u.age_actuel,
+        u.rang,
+        u.etat,
+        u.niveau_accreditation,
+      FROM users u
+      JOIN division d on u.choix_div = d.id_div
+      WHERE u.choix_div = 1
+    `);
+    } catch (err) {
+      console.error('Erreur serveur lors de la récupération des effectifs de la 1ere division:', err);
+      res.status(500).json({ message: 'Erreur serveur' });
+    }
+    res.json(result.rows[0]);
+});
+
 module.exports = router;
