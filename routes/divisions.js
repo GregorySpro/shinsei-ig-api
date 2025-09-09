@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 // Connexion à PostgreSQL avec la même configuration que celle de ton exemple
 const pool = new Pool({
@@ -25,7 +26,7 @@ router.get('/divisions', async (req, res) => {
 
 // ROUTE DES EFFECTIFS DE DIVISIONS
 
-router.get('/divisions/effectifs/1ere', async (req, res) => {
+router.get('/divisions/effectifs/1ere', authMiddleware, async (res) => {
   try {
     //Recup les effectifs de la 1ere division
     const result = await pool.query(`
@@ -37,8 +38,8 @@ router.get('/divisions/effectifs/1ere', async (req, res) => {
         u.etat,
         u.niveau_accreditation,
       FROM users u
-      JOIN division d on u.choix_div = d.id_div
-      WHERE u.choix_div = 1
+      JOIN division d on u.division = d.id_div
+      WHERE u.division = 1
     `);
     } catch (err) {
       console.error('Erreur serveur lors de la récupération des effectifs de la 1ere division:', err);
