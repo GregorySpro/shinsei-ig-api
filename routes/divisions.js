@@ -259,14 +259,21 @@ router.get('/divisions/candidatures', authMiddleware, async (req, res) => {
   }
 });
 
-router.put('/divisions/candidatures/:id_user/accept', authMiddleware, async (req, res) => {
+router.put('/divisions/candidatures/:id_aspirant/accept', authMiddleware, async (req, res) => {
   try {
-    const { id_user } = req.params;
-    const userResult = await pool.query('SELECT choix_div FROM users WHERE id_user = $1', [id_user]);
+    const { id_aspirant } = req.params;
+    const userResult = await pool.query(
+      `SELECT 
+        u.choix_div,
+        u.id_user
+      FROM users u 
+      JOIN academie a ON u.id_user = a.id_user
+      WHERE a.id_aspirant = $1`, [id_aspirant]);
 
     if (userResult.rowCount === 0) {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
+    const id_user = userResult.rows[0].id_user;
     const userDivisionChoiceId = userResult.rows[0].choix_div;
     const updateResult = await pool.query(
       `UPDATE users SET 
