@@ -224,7 +224,7 @@ router.get('/divisions/effectifs/12e', authMiddleware, async (req, res) => {
 
 router.get('/divisions/candidatures', authMiddleware, async (req, res) => {
   try {
-
+    const userIdentifiant = req.user.identifiant;
     const userResult = await pool.query('SELECT division FROM users WHERE identifiant = $1', [userIdentifiant]);
         if (userResult.rowCount === 0) {
             return res.status(404).json({ message: 'Utilisateur non trouvé.' });
