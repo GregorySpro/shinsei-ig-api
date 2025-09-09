@@ -240,7 +240,7 @@ router.get('/divisions/candidatures', authMiddleware, async (req, res) => {
         SELECT 
         u.nom,
         u.prenom,
-        u.age,
+        u.age_actuel,
         u.motivations
         FROM users u
         JOIN divisions d ON u.choix_div = d.id_div
