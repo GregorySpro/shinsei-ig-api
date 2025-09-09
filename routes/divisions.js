@@ -238,6 +238,7 @@ router.get('/divisions/candidatures', authMiddleware, async (req, res) => {
     // Récupération des candidatures
     const result = await pool.query(`
         SELECT 
+        u.id_user,
         u.nom,
         u.prenom,
         u.age_actuel,
@@ -255,6 +256,30 @@ router.get('/divisions/candidatures', authMiddleware, async (req, res) => {
   } catch (err) {
       console.error('Erreur serveur lors de la récupération des candidatures de la division:', err);
       res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+router.put('/divisions/candidatures/:id_user/accept', authMiddleware, async (req, res) => {
+  try {
+    const { id_user } = req.params;
+    const userIdentifiant = req.user.identifiant;
+    const userResult = await pool.query('SELECT choix_div FROM users WHERE identifiant = $1', [userIdentifiant]);
+
+    if (userResult.rowCount === 0) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    }
+    const userDivisionId = userResult.rows[0].division;
+    const updateResult = await pool.query(
+      `UPDATE users SET division = $1 WHERE id_user = $2 RETURNING *`,
+      [userDivisionId, id_user]
+    );
+    if (updateResult.rowCount === 0) {
+      return res.status(404).json({ message: 'Candidat non trouvé.' });
+    }
+    res.json(updateResult.rows[0]);
+  } catch (err) {
+    console.error('Erreur serveur lors de l\'acceptation du candidat :', err);
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 });
 
