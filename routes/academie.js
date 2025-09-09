@@ -135,7 +135,7 @@ router.put('/academie/set_actif_aspirant/:id', authMiddleware, async (req, res) 
 
     // 2. Mettez à jour le status de l'aspirant dans la table "academie"
     const updateResult = await pool.query(
-      `UPDATE academie SET status_eleve = "TRUE" WHERE id_aspirant = $1 RETURNING *`,
+      `UPDATE academie SET status_eleve = TRUE WHERE id_aspirant = $1 RETURNING *`,
       [id]
     );
 
