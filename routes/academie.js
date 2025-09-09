@@ -33,6 +33,31 @@ router.get('/academie/aspirants', authMiddleware, async (req, res) => {
   }
 });
 
+router.get('/academie/aspirants_actif', authMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+          u.prenom,
+          u.nom,
+          u.rang,
+          u.age_actuel,
+          u.motivations,
+          d.labelle_division,
+          a.note_qcm,
+          a.note_zanjutsu,
+          a.date_inscription
+      FROM academie a WHERE a.status_eleve = TRUE
+        JOIN users u ON a.id_user = u.id_user
+        LEFT JOIN divisions d ON u.choix_div = d.id_div
+    `);
+    
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erreur DB academie/aspirants:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
 router.post('/academie/valider', authMiddleware, async (req, res) => {
   try {
     // On ne prend plus l'identifiant du token (req.user.identifiant)
