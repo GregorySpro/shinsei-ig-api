@@ -38,7 +38,7 @@ router.get('/divisions/effectifs/1ere', authMiddleware, async (req, res) => {
         u.etat,
         u.niveau_accreditation
       FROM users u
-        JOIN division d on u.division = d.id_div
+        JOIN divisions d on u.division = d.id_div
       WHERE u.division = 1
     `);
 
