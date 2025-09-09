@@ -26,9 +26,9 @@ router.get('/divisions', async (req, res) => {
 
 // ROUTE DES EFFECTIFS DE DIVISIONS
 
-router.get('/divisions/effectifs/1ere', authMiddleware, async (res) => {
+router.get('/divisions/effectifs/1ere', authMiddleware, async (req, res) => {
   try {
-    //Recup les effectifs de la 1ere division
+    // Recup les effectifs de la 1ere division
     const result = await pool.query(`
       SELECT
         u.nom,
@@ -36,16 +36,21 @@ router.get('/divisions/effectifs/1ere', authMiddleware, async (res) => {
         u.age_actuel,
         u.rang,
         u.etat,
-        u.niveau_accreditation,
+        u.niveau_accreditation
       FROM users u
         JOIN division d on u.division = d.id_div
       WHERE u.division = 1
     `);
-    } catch (err) {
-      console.error('Erreur serveur lors de la récupération des effectifs de la 1ere division:', err);
-      res.status(500).json({ message: 'Erreur serveur' });
-    }
-    res.json(result.rows[0]);
-});
 
+    // S'assurer qu'il y a des résultats avant de répondre
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour la 1ère division.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de la 1ere division:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
 module.exports = router;
