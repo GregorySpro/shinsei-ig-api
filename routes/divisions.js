@@ -249,15 +249,13 @@ router.get('/divisions/candidatures', authMiddleware, async (req, res) => {
         u.choix_div = $1 
         AND u.division IS NULL 
         AND a.status_candid = 'Réussite'
-    `, [userDivisionId]);
-
-    // Répondre avec les candidatures trouvées ou un tableau vide
-    res.status(200).json(result.rows);
-
-  } catch (err) {
-    console.error('Erreur serveur lors de la récupération des candidatures de la division:', err);
-    res.status(500).json({ message: 'Erreur serveur' });
-  }
+      `, [userDivisionId]);
+      // Répondre avec les candidatures trouvées ou un tableau vide
+      res.status(200).json(result.rows);
+  } catch (err) {
+      console.error('Erreur serveur lors de la récupération des candidatures de la division:', err);
+      res.status(500).json({ message: 'Erreur serveur' });
+  }
 });
 
 module.exports = router;
