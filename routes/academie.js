@@ -17,12 +17,13 @@ router.get('/academie/aspirants', authMiddleware, async (req, res) => {
           u.rang,
           u.age_actuel,
           u.motivations,
-          u.choix_div,
+          d.labelle_division AS choix_div,
           a.note_qcm,
           a.note_zanjutsu,
           a.date_inscription
       FROM academie a 
         JOIN users u ON a.id_user = u.id_user
+        LEFT JOIN divisions d ON u.choix_div = d.labelle_division
     `);
     
     res.json(result.rows);
