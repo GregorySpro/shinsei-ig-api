@@ -270,7 +270,11 @@ router.put('/divisions/candidatures/:id_user/accept', authMiddleware, async (req
     }
     const userDivisionId = userResult.rows[0].division;
     const updateResult = await pool.query(
-      `UPDATE users SET division = $1 WHERE id_user = $2 RETURNING *`,
+      `UPDATE users SET 
+      division = $1,
+      rang = '3e classe',
+      niveau_accreditation = ["2"]
+      WHERE id_user = $2 RETURNING *`,
       [userDivisionId, id_user]
     );
     if (updateResult.rowCount === 0) {
