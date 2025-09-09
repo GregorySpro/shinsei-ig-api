@@ -53,4 +53,172 @@ router.get('/divisions/effectifs/1ere', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur' });
   }
 });
+
+router.get('/divisions/effectifs/4e', authMiddleware, async (req, res) => {
+  try {
+    // Recup les effectifs de la 1ere division
+    const result = await pool.query(`
+      SELECT
+        u.nom,
+        u.prenom,
+        u.age_actuel,
+        u.rang,
+        u.etat,
+        u.niveau_accreditation
+      FROM users u
+        JOIN divisions d on u.division = d.id_div
+      WHERE u.division = 2
+    `);
+
+    // S'assurer qu'il y a des résultats avant de répondre
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour la 1ère division.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de la 1ere division:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+router.get('/divisions/effectifs/6e', authMiddleware, async (req, res) => {
+  try {
+    // Recup les effectifs de la 1ere division
+    const result = await pool.query(`
+      SELECT
+        u.nom,
+        u.prenom,
+        u.age_actuel,
+        u.rang,
+        u.etat,
+        u.niveau_accreditation
+      FROM users u
+        JOIN divisions d on u.division = d.id_div
+      WHERE u.division = 3
+    `);
+
+    // S'assurer qu'il y a des résultats avant de répondre
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour la 1ère division.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de la 1ere division:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+router.get('/divisions/effectifs/9e', authMiddleware, async (req, res) => {
+  try {
+    // Recup les effectifs de la 1ere division
+    const result = await pool.query(`
+      SELECT
+        u.nom,
+        u.prenom,
+        u.age_actuel,
+        u.rang,
+        u.etat,
+        u.niveau_accreditation
+      FROM users u
+        JOIN divisions d on u.division = d.id_div
+      WHERE u.division = 4
+    `);
+
+    // S'assurer qu'il y a des résultats avant de répondre
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour la 1ère division.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de la 1ere division:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+router.get('/divisions/effectifs/10e', authMiddleware, async (req, res) => {
+  try {
+    // Recup les effectifs de la 1ere division
+    const result = await pool.query(`
+      SELECT
+        u.nom,
+        u.prenom,
+        u.age_actuel,
+        u.rang,
+        u.etat,
+        u.niveau_accreditation
+      FROM users u
+        JOIN divisions d on u.division = d.id_div
+      WHERE u.division = 5
+    `);
+
+    // S'assurer qu'il y a des résultats avant de répondre
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour la 1ère division.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de la 1ere division:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+router.get('/divisions/effectifs/11e', authMiddleware, async (req, res) => {
+  try {
+    // Recup les effectifs de la 1ere division
+    const result = await pool.query(`
+      SELECT
+        u.nom,
+        u.prenom,
+        u.age_actuel,
+        u.rang,
+        u.etat,
+        u.niveau_accreditation
+      FROM users u
+        JOIN divisions d on u.division = d.id_div
+      WHERE u.division = 6
+    `);
+
+    // S'assurer qu'il y a des résultats avant de répondre
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour la 1ère division.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de la 1ere division:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+router.get('/divisions/effectifs/12e', authMiddleware, async (req, res) => {
+  try {
+    // Recup les effectifs de la 1ere division
+    const result = await pool.query(`
+      SELECT
+        u.nom,
+        u.prenom,
+        u.age_actuel,
+        u.rang,
+        u.etat,
+        u.niveau_accreditation
+      FROM users u
+        JOIN divisions d on u.division = d.id_div
+      WHERE u.division = 7
+    `);
+
+    // S'assurer qu'il y a des résultats avant de répondre
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour la 1ère division.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de la 1ere division:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
 module.exports = router;
