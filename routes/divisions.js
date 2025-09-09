@@ -244,7 +244,7 @@ router.get('/divisions/candidatures', authMiddleware, async (req, res) => {
         u.motivations
         FROM users u
         JOIN divisions d ON u.choix_div = d.id_div
-        JOIN academie a
+        JOIN academie a ON u.id_user = a.id_user
       WHERE 
         u.choix_div = $1 
         AND u.division IS NULL 
