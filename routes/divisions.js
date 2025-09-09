@@ -272,7 +272,7 @@ router.put('/divisions/candidatures/:id_user/accept', authMiddleware, async (req
       `UPDATE users SET 
       division = $1,
       rang = '3e classe',
-      niveau_accreditation = ["2"]
+      niveau_accreditation = ['2']
       WHERE id_user = $2 RETURNING *`,
       [userDivisionChoiceId, id_user]
     );
