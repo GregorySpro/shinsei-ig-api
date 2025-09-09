@@ -272,9 +272,9 @@ router.put('/divisions/candidatures/:id_user/accept', authMiddleware, async (req
       `UPDATE users SET 
       division = $1,
       rang = '3e classe',
-      niveau_accreditation = ARRAY['2']
+      niveau_accreditation = $3
       WHERE id_user = $2 RETURNING *`,
-      [userDivisionChoiceId, id_user]
+      [userDivisionChoiceId, id_user, [2]]
     );
     if (updateResult.rowCount === 0) {
       return res.status(404).json({ message: 'Candidat non trouvé.' });
