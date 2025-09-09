@@ -268,14 +268,14 @@ router.put('/divisions/candidatures/:id_user/accept', authMiddleware, async (req
     if (userResult.rowCount === 0) {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
-    const userDivisionId = userResult.rows[0].division;
+    const userDivisionChoiceId = userResult.rows[0].choix_div;
     const updateResult = await pool.query(
       `UPDATE users SET 
       division = $1,
       rang = '3e classe',
       niveau_accreditation = ["2"]
       WHERE id_user = $2 RETURNING *`,
-      [userDivisionId, id_user]
+      [userDivisionChoiceId, id_user]
     );
     if (updateResult.rowCount === 0) {
       return res.status(404).json({ message: 'Candidat non trouvé.' });
