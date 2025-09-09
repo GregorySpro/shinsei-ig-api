@@ -238,7 +238,7 @@ router.get('/divisions/candidatures', authMiddleware, async (req, res) => {
     // Récupération des candidatures
     const result = await pool.query(`
         SELECT 
-        u.id_user,
+        a.id_aspirant,
         u.nom,
         u.prenom,
         u.age_actuel,
