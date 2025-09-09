@@ -124,6 +124,35 @@ router.put('/academie/:id/notes/zanjutsu', authMiddleware, async (req, res) => {
   }
 });
 
+router.put('/academie/set_actif_aspirant/:id', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params; // Récupère l'ID de l'aspirant depuis les paramètres de l'URL
+
+    // 1. Vérifiez le format de l'id
+    if (id === undefined || isNaN(id) ) {
+      return res.status(400).json({ message: 'Id mal envoyé à l\'API !' });
+    }
+
+    // 2. Mettez à jour le status de l'aspirant dans la table "academie"
+    const updateResult = await pool.query(
+      `UPDATE academie SET status_eleve = "TRUE" WHERE id_aspirant = $1 RETURNING *`,
+      [id]
+    );
+
+    // 3. Vérifiez si une ligne a été mise à jour
+    if (updateResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Aspirant non trouvé pour cet identifiant.' });
+    }
+
+    // 4. Renvoie l'enregistrement mis à jour
+    res.json(updateResult.rows[0]);
+
+  } catch (error) {
+    console.error('Erreur DB lors de la mise à jour du status :', error);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+});
+
 
 
 module.exports = router;
