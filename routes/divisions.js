@@ -262,8 +262,7 @@ router.get('/divisions/candidatures', authMiddleware, async (req, res) => {
 router.put('/divisions/candidatures/:id_user/accept', authMiddleware, async (req, res) => {
   try {
     const { id_user } = req.params;
-    const userIdentifiant = req.user.identifiant;
-    const userResult = await pool.query('SELECT choix_div FROM users WHERE identifiant = $1', [userIdentifiant]);
+    const userResult = await pool.query('SELECT choix_div FROM users WHERE id_user = $1', [id_user]);
 
     if (userResult.rowCount === 0) {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
