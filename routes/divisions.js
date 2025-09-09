@@ -244,7 +244,7 @@ router.get('/divisions/candidatures', authMiddleware, async (req, res) => {
         u.motivations
         FROM users u
         JOIN divisions d ON u.choix_div = d.id_div
-      JOIN academie a ON u.id_user = a.user_id_colonne -- Assurez-vous d'avoir une colonne pour lier les deux tables.
+        JOIN academie a
       WHERE 
         u.choix_div = $1 
         AND u.division IS NULL 
