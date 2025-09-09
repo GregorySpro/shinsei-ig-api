@@ -46,9 +46,10 @@ router.get('/academie/aspirants_actif', authMiddleware, async (req, res) => {
           a.note_qcm,
           a.note_zanjutsu,
           a.date_inscription
-      FROM academie a WHERE a.status_eleve = TRUE
+      FROM academie a 
         JOIN users u ON a.id_user = u.id_user
         LEFT JOIN divisions d ON u.choix_div = d.id_div
+      WHERE a.status_eleve = TRUE
     `);
     
     res.json(result.rows);
