@@ -15,6 +15,9 @@ router.get('/academie/aspirants', authMiddleware, async (req, res) => {
           u.prenom,
           u.nom,
           u.rang,
+          u.age_actuel,
+          u.motivations,
+          u.choix_div,
           a.note_qcm,
           a.note_zanjutsu,
           a.date_inscription
