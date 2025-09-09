@@ -221,4 +221,37 @@ router.get('/divisions/effectifs/12e', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur' });
   }
 });
+
+router.get('/divisions/candidatures', authMiddleware, async (req, res) => {
+  try {
+
+    const userResult = await pool.query('SELECT division FROM users WHERE identifiant = $1', [userIdentifiant]);
+        if (userResult.rowCount === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+        }
+        const userDivisionId = userResult.rows[0].division;
+    // Recup les candidatures
+    const result = await pool.query(`
+      SELECT 
+        u.nom,
+        u.prenom,
+        u.age,
+        u.motivations
+      FROM users u
+      JOIN divisions d on u.choix_div = d.id_div
+      LEFT JOIN academie a
+      WHERE u.choix_div = $1 AND u.division = NULL AND a.status_candid = "Réussite"
+    `, [userDivisionId]);
+    // S'assurer qu'il y a des résultats avant de répondre
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucune candidature trouvée pour cette division.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des candidatures de la division:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
 module.exports = router;
