@@ -279,7 +279,18 @@ router.put('/divisions/candidatures/:id_user/accept', authMiddleware, async (req
     if (updateResult.rowCount === 0) {
       return res.status(404).json({ message: 'Candidat non trouvé.' });
     }
-    res.json(updateResult.rows[0]);
+    // A new object with only the public information
+    const publicUser = {
+      id_user: updateResult.rows[0].id_user,
+      prenom: updateResult.rows[0].prenom,
+      nom: updateResult.rows[0].nom,
+      division: updateResult.rows[0].division,
+      rang: updateResult.rows[0].rang,
+      niveau_accreditation: updateResult.rows[0].niveau_accreditation,
+      };
+
+// Send the new, filtered object
+res.json(publicUser);
   } catch (err) {
     console.error('Erreur serveur lors de l\'acceptation du candidat :', err);
     res.status(500).json({ message: 'Erreur serveur' });
