@@ -238,14 +238,14 @@ router.get('/divisions/candidatures', authMiddleware, async (req, res) => {
     // Récupération des candidatures
     const result = await pool.query(`
       SELECT 
-        u.nom,
-        u.prenom,
-        u.age,
-        u.motivations
-      FROM users u
-      JOIN divisions d ON u.choix_div = d.id_div
+        u.nom,
+        u.prenom,
+        u.age,
+        u.motivations
+        FROM users u
+        JOIN divisions d ON u.choix_div = d.id_div
       JOIN academie a ON u.id_user = a.user_id_colonne -- Assurez-vous d'avoir une colonne pour lier les deux tables.
-      WHERE 
+      WHERE 
         u.choix_div = $1 
         AND u.division IS NULL 
         AND a.status_candid = 'Réussite'
