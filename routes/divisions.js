@@ -334,7 +334,7 @@ router.get('/divisions/get_actu_public/:id', authMiddleware, async (req, res) =>
         const result = await pool.query(`
             SELECT 
                 d.titre_actu_publique,
-                d.content_actu_publique
+                d.contenu_actu_publique
             FROM divisions d
             WHERE d.id_div = $1
         `, [divisionId]);
