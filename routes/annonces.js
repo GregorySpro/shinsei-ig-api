@@ -154,7 +154,7 @@ router.get('/division/last/:id', authMiddleware, async (req, res) => {
             JOIN users u ON a.userid = u.id_user
             WHERE a.type_annonce = 'division' AND a.division = $1
             ORDER BY a.date DESC, a.heure DESC
-            LIMIT 1
+            LIMIT 2
         `, [divisionId]);
         res.status(200).json(result.rows);
     } catch (error) {
