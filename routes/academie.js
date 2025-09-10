@@ -21,7 +21,8 @@ router.get('/academie/aspirants', authMiddleware, async (req, res) => {
           a.note_qcm,
           a.note_zanjutsu,
           a.date_inscription,
-          a.status_eleve
+          a.status_eleve,
+          a.id_aspirant
       FROM academie a 
         JOIN users u ON a.id_user = u.id_user
         LEFT JOIN divisions d ON u.choix_div = d.id_div
