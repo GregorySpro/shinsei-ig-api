@@ -137,5 +137,32 @@ router.get('/division', authMiddleware, async (req, res) => {
     }
 });
 
+router.get('/division/last/:id', authMiddleware, async (req, res) => {
+    try {
+        const divisionId = req.params.id;
+        console.log('divisionId:', divisionId); // Pour déboguer
+        const result = await pool.query(`
+            SELECT 
+                a.titre_annonce,
+                a.content_annonce,
+                a.division,
+                a.date,
+                a.heure,
+                u.prenom,
+                u.nom
+            FROM annonces a
+            JOIN users u ON a.userid = u.id_user
+            WHERE a.type_annonce = 'division' AND a.division = $1
+            ORDER BY a.date DESC, a.heure DESC
+            LIMIT 1
+        `, [divisionId]);
+        res.status(200).json(result.rows);
+    } catch (error) {
+        console.error('Erreur DB complète:', error);
+        res.status(500).json({ message: 'Erreur serveur' });
+    } 
+});
+                
+
 
 module.exports = router;
