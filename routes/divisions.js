@@ -327,4 +327,25 @@ res.json(publicUser);
   }
 });
 
+router.get('/divisions/get_actu_public/:id', async (req, res) => {
+    try {
+        const divisionId = req.params.id;
+        console.log('divisionId:', divisionId); // Pour déboguer
+        const result = await pool.query(`
+            SELECT 
+                d.titre_actu_publique,
+                d.content_actu_publique
+            FROM divisions d
+            WHERE d.id_div = $1
+        `, [divisionId]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Aucune actualité publique trouvée pour cette division.' });
+        }
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Erreur serveur lors de la récupération de l\'actualité publique de la division :', err);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
+
 module.exports = router;
