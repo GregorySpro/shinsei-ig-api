@@ -23,6 +23,29 @@ router.get('/divisions', async (req, res) => {
   }
 });
 
+router.get('/divisions/get_user_division', authMiddleware, async (req, res) => {
+  try {
+    const userIdentifiant = req.user.identifiant;
+    const userResult = await pool.query('SELECT division FROM users WHERE identifiant = $1', [userIdentifiant]);
+    if (userResult.rowCount === 0) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    } 
+    const userDivisionId = userResult.rows[0].division;
+    if (!userDivisionId) {
+      return res.status(200).json({ message: 'L\'utilisateur n\'appartient à aucune division.' });
+    } 
+
+    const divisionResult = await pool.query('SELECT id_div, labelle_division, description_division FROM divisions WHERE id_div = $1', [userDivisionId]);
+    if (divisionResult.rowCount === 0) {
+      return res.status(404).json({ message: 'Division non trouvée.' });
+    }
+    res.json(divisionResult.rows[0]);
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération de la division de l\'utilisateur:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  } 
+});
+
 
 // ROUTE DES EFFECTIFS DE DIVISIONS
 
