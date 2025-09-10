@@ -327,7 +327,7 @@ res.json(publicUser);
   }
 });
 
-router.get('/divisions/get_actu_public/:id', async (req, res) => {
+router.get('/divisions/get_actu_public/:id', authMiddleware, async (req, res) => {
     try {
         const divisionId = req.params.id;
         console.log('divisionId:', divisionId); // Pour déboguer
