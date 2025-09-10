@@ -13,7 +13,7 @@ const pool = new Pool({
 router.get('/divisions', async (req, res) => {
   try {
     // Récupérer uniquement id_div, labelle_division et description_division
-    const result = await pool.query('SELECT id_div, labelle_division, description_division FROM divisions');
+    const result = await pool.query('SELECT id_div, labelle_division, description_division, nom_gerant FROM divisions');
 
     // Renvoyer les résultats sous forme de JSON
     res.json(result.rows);
