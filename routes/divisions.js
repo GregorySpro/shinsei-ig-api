@@ -353,16 +353,15 @@ router.get('/divisions/get_actu_public/:id', authMiddleware, async (req, res) =>
 router.put('/divisions/:id/gestion/update', authMiddleware, async (req, res) => {
   try {
     const divisionId = req.params.id;
-    const { labelle_division, description_division, fonction_div, note_ecrit_min, note_zanjutsu_min } = req.body;
+    const { description_division, fonction_div, note_ecrit_min, note_zanjutsu_min } = req.body;
     const updateResult = await pool.query(
       `UPDATE divisions SET 
-      labelle_division = $1,
-      description_division = $2, 
-      fonction_div = $3,
-      note_ecrit_min = $4,
-      note_zanjutsu_min = $5
-      WHERE id_div = $6 RETURNING *`,
-      [labelle_division, description_division, fonction_div, note_ecrit_min, note_zanjutsu_min, divisionId]
+      description_division = $1, 
+      fonction_div = $2,
+      note_ecrit_min = $3,
+      note_zanjutsu_min = $4
+      WHERE id_div = $5 RETURNING *`,
+      [description_division, fonction_div, note_ecrit_min, note_zanjutsu_min, divisionId]
     );
     if (updateResult.rowCount === 0) {
       return res.status(404).json({ message: 'Division non trouvée.' });
