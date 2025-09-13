@@ -366,7 +366,7 @@ router.put('/divisions/:id/gestion/update', authMiddleware, async (req, res) => 
     if (updateResult.rowCount === 0) {
       return res.status(404).json({ message: 'Division non trouvée.' });
     }
-    res.json(updateResult.rows[0]);
+    res.json("Mise à jour de la division réussie.");
   } catch (err) {
     console.error('Erreur serveur lors de la mise à jour de la division :', err);
     res.status(500).json({ message: 'Erreur serveur' });
