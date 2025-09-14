@@ -165,7 +165,7 @@ router.get('/division/last/:id', authMiddleware, async (req, res) => {
 
 router.post('/create/division', authMiddleware, async (req, res) => {
   try {
-    const { titre_annonce, content_annonce, type_annonce, division } = req.body;
+    const { titre_annonce, content_annonce } = req.body;
     const identifiant = req.user.identifiant;
     const userResult = await pool.query('SELECT id_user, division FROM users WHERE identifiant = $1', [identifiant]);
     if (userResult.rows.length === 0) {
@@ -173,16 +173,14 @@ router.post('/create/division', authMiddleware, async (req, res) => {
     } 
     const userid = userResult.rows[0].id_user;
     const userDivision = userResult.rows[0].division;
-    if (type_annonce === 'division' && division !== userDivision) {
-      return res.status(403).json({ message: 'Vous ne pouvez créer une annonce que pour votre propre division.' });
-    }
+    const type_annonce = 'division';
     const now = new Date();
     const date = now.toISOString().split('T')[0];
     const heure = now.toTimeString().split(' ')[0];
     await pool.query(
       `INSERT INTO annonces (userid, titre_annonce, content_annonce, type_annonce, division, date, heure)
        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [userid, titre_annonce, content_annonce, type_annonce, division, date, heure]
+      [userid, titre_annonce, content_annonce, type_annonce, userDivision, date, heure]
     );
     res.status(201).json({ message: 'Annonce créée avec succès' });
   } catch (error) {
