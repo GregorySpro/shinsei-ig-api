@@ -19,6 +19,7 @@ app.use(express.json());
 app.get('/users', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM users'); // adapte selon ta table
+    console.log(result.rows);
     res.json(result.rows);
   } catch (error) {
     console.error(error);
