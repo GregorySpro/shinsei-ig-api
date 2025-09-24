@@ -15,7 +15,7 @@ router.get('/divisions/:faction', async (req, res) => {
 
     const { faction } = req.params;
     // Récupérer uniquement id_div, labelle_division et description_division
-    const result = await pool.query('SELECT id_div, labelle_division, description_division, nom_gerant FROM divisions WHERE faction == $1 ORDER BY id_div ASC', [faction]);
+    const result = await pool.query('SELECT id_div, labelle_division, description_division, nom_gerant FROM divisions WHERE type_division == $1 ORDER BY id_div ASC', [faction]);
 
     // Renvoyer les résultats sous forme de JSON
     res.json(result.rows);
