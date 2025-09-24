@@ -32,8 +32,9 @@ router.get('/simple', authMiddleware, async (req, res) => {
   }
 });
 
-router.get('/global', authMiddleware, async (req, res) => {
+router.get('/global/:faction', authMiddleware, async (req, res) => {
   try {
+    const { faction } = req.params;
     const result = await pool.query(`
       SELECT 
         a.titre_annonce,
@@ -45,8 +46,9 @@ router.get('/global', authMiddleware, async (req, res) => {
       FROM annonces a
       JOIN users u ON a.userid = u.id_user
       WHERE a.type_annonce = 'global'
+      AND a.faction = $1
       ORDER BY a.date DESC, a.heure DESC
-    `);
+    `, [faction]);
 
     res.status(200).json(result.rows);
   } catch (error) {
