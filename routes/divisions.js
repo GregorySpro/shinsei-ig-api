@@ -36,7 +36,8 @@ router.get('/divisions/get_user_division', authMiddleware, async (req, res) => {
     console.log('userDivisionId:', userDivisionId); // Pour déboguer
     if (!userDivisionId) {
       console.log('L\'utilisateur n\'a pas de division assignée.'); // Pour déboguer
-      return res.status(200).json({ message: 'L\'utilisateur n\'appartient à aucune division.' });
+      return res.status(200).json({ message: 'L\'utilisateur n\'appartient à aucune division.' }, { division: userDivisionId}); //supp ici
+
     } 
 
     const divisionResult = await pool.query('SELECT id_div, labelle_division, description_division FROM divisions WHERE id_div = $1', [userDivisionId]);
