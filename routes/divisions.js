@@ -217,6 +217,90 @@ router.get('/divisions/effectifs/12e', authMiddleware, async (req, res) => {
   }
 });
 
+router.get('/divisions/effectifs/souverain', authMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query(`SELECT u.nom, u.prenom, u.age_actuel, u.rang, u.etat, u.niveau_accreditation FROM users u JOIN divisions d on u.division = d.id_div WHERE u.division = 8`);
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour l\'ordre souverain.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de l\'ordre souverain:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+router.get('/divisions/effectifs/medical', authMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query(`SELECT u.nom, u.prenom, u.age_actuel, u.rang, u.etat, u.niveau_accreditation FROM users u JOIN divisions d on u.division = d.id_div WHERE u.division = 9`);
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour l\'ordre médical.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de l\'ordre médical:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+router.get('/divisions/effectifs/glaive', authMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query(`SELECT u.nom, u.prenom, u.age_actuel, u.rang, u.etat, u.niveau_accreditation FROM users u JOIN divisions d on u.division = d.id_div WHERE u.division = 10`);
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour l\'ordre glaive.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de l\'ordre glaive:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+router.get('/divisions/effectifs/sentinelle', authMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query(`SELECT u.nom, u.prenom, u.age_actuel, u.rang, u.etat, u.niveau_accreditation FROM users u JOIN divisions d on u.division = d.id_div WHERE u.division = 12`);
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour l\'ordre sentinelle.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de l\'ordre sentinelle:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+router.get('/divisions/effectifs/belliqueux', authMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query(`SELECT u.nom, u.prenom, u.age_actuel, u.rang, u.etat, u.niveau_accreditation FROM users u JOIN divisions d on u.division = d.id_div WHERE u.division = 13`);
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour l\'ordre belliqueux.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de l\'ordre belliqueux:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+router.get('/divisions/effectifs/savant', authMiddleware, async (req, res) => {
+  try {
+    const result = await pool.query(`SELECT u.nom, u.prenom, u.age_actuel, u.rang, u.etat, u.niveau_accreditation FROM users u JOIN divisions d on u.division = d.id_div WHERE u.division = 14`);
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).json({ message: 'Aucun effectif trouvé pour l\'ordre savant.' });
+    }
+  } catch (err) {
+    console.error('Erreur serveur lors de la récupération des effectifs de l\'ordre savant:', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
 
 // --- Routes génériques ensuite ---
 
