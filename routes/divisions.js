@@ -33,6 +33,7 @@ router.get('/divisions/get_user_division', authMiddleware, async (req, res) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     } 
     const userDivisionId = userResult.rows[0].division;
+    console.log('userDivisionId:', userDivisionId); // Pour déboguer
     if (!userDivisionId) {
       console.log('L\'utilisateur n\'a pas de division assignée.'); // Pour déboguer
       return res.status(200).json({ message: 'L\'utilisateur n\'appartient à aucune division.' });
